@@ -3,7 +3,7 @@
 
   let screenWidth;
   let screenHeight;
-  let timing = 5; //en nb de secondes
+  let timing = 5; //en nb de seconde
   let circle = {
     cx: 0,
     cy: 0,
@@ -41,9 +41,9 @@
       } while (finCycle - debutCycle < timing * 1000);
       console.log("cycle", finCycle - debutCycle);
       fin = Date.now();
-    } while ((fin - debut < 60 * 1000));
+    } while (fin - debut < 60 * 1000);
     console.log("durée", fin - debut);
-	circle.r = 0;
+    circle.r = 0;
   };
 
   const locate = () => {
@@ -86,7 +86,7 @@
   label {
     padding: 5px;
     height: 30px;
-	margin: 0 10px 0 0;
+    margin: 0 10px 0 0;
   }
 
   input {
@@ -98,8 +98,8 @@
   }
 
   button {
-	color: white;
-	margin: 0 10px 0 10px;
+    color: white;
+    margin: 0 10px 0 10px;
     background-color: rgb(99, 21, 21);
   }
 
