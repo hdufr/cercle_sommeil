@@ -17,7 +17,8 @@
   };
   let increase = false;
   let askFull = false;
-  let labelButton
+  let labelButton;
+  let resize = false;
 
   const circleResize = async () => {
     let timeout = timing * 100; // par 10 milliemes de seconde
@@ -26,41 +27,36 @@
 
     let debut = Date.now();
     let fin = 0;
+    let finCycle = 0;
     let rmini = 0;
-    let onOrder;
 
     fullScreen();
-    onOrder = askFull;
 
     do {
       increase = !increase;
 
       let debutCycle = Date.now();
-      let finCycle = 0;
+      finCycle = 0;
       do {
         const promise = new Promise((resolve, reject) => {
-          if (onOrder) {
-            setTimeout(() => {
-              if (increase) {
-                circle.r += delta;
-              } else {
-                rmini = circle.r - delta;
-                circle.r = Math.max(rmini, 0);
-              }
-              resolve(Date.now());
-            }, 10);
-          } else {
-            reject(0);
-          }
+          setTimeout(() => {
+            if (increase) {
+              circle.r += delta;
+            } else {
+              rmini = circle.r - delta;
+              circle.r = Math.max(rmini, 0);
+            }
+            resolve(Date.now());
+          }, 10);
         });
         finCycle = await promise;
-      } while (finCycle - debutCycle < timing * 1000 && finCycle != 0);
+      } while (finCycle - debutCycle < timing * 1000 && resize);
       // console.log("cycle", finCycle - debutCycle);
       fin = Date.now();
-    } while (fin - debut < session * 60 * 1000 && finCycle != 0);
+    } while (fin - debut < session * 60 * 1000 && resize);
     // console.log("durée", fin - debut);
     circle.r = 0;
-
+    resize = false;
     fullScreen();
   };
 
@@ -82,8 +78,15 @@
     askFull = !askFull;
   };
 
+  const start = () => {
+    if (!resize) {
+      circleResize();
+      resize = true;
+    }else{resize = false}
+  };
+
   $: if (screenWidth > 0) locate();
-  $: askFull?labelButton = "Arrêter":labelButton = "Commencer";
+  $: askFull ? (labelButton = "Arrêter") : (labelButton = "Commencer");
 </script>
 
 <svelte:window
@@ -97,7 +100,7 @@
   <div class="d-flex justify-content-between">
     <div />
     <div>
-      <Button color="dark" on:click={circleResize} size="lg">{labelButton}</Button>
+      <Button color="dark" on:click={start} size="lg">{labelButton}</Button>
     </div>
     <div>
       <Button color="dark" on:click={openSettings} size="lg"

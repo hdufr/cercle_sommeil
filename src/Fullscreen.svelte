@@ -4,6 +4,7 @@
 
   // define initial component state
   let isFull = true;
+  let start = false;
   let fsContainer = null;
   export let askFull = false;
 
@@ -52,6 +53,7 @@
 
   // handler for the fullscreen button
   const fsToggle = () => {
+    if(!start){start = true; return}
     if (!fullscreenSupport) return;
 
     if (!askFull) {
